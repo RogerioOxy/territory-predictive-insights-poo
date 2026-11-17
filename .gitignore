@@ -1,0 +1,17 @@
+target/
+.mvn/wrapper/maven-wrapper.jar
+dados/
+exportacoes/
+*.log
+
+### IDEs ###
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+.apt_generated
+.sts4-cache
+bin/
