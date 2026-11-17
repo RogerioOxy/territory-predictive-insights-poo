@@ -246,4 +246,6 @@ A revisão incluiu 38 testes automatizados rodando verdes; execução do menu co
 
 ## Divisão de tarefas
 
-[ROGER PREENCHE: quem fez o quê]
+- Rogério Deligi Ferreira Filho (RM561942) ficou responsável pela modelagem do domínio (sensores, pontos vulneráveis, medições e alertas), persistência com JPA e H2, serviço de monitoramento, estratégias de previsão com a fábrica e publicação do repositório no GitHub.
+- Maria Fernanda Garavelli Dantas (RM562686) ficou responsável pela conferência dos testes automatizados, teste do menu de console e do reinício para verificar a persistência, teste do clone limpo seguindo o README e revisão do README.
+- Os dois ficaram responsáveis pelo estudo do código para a conversa de correção.
