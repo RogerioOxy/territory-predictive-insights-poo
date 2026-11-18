@@ -18,7 +18,7 @@ Usamos Java 17, Spring Boot 4.1.1, Spring Data JPA e H2 em arquivo. `SistemaMoni
 
 Instale o JDK 17 e configure `JAVA_HOME` ou deixe o Java disponível no `PATH`. O Maven Wrapper está incluído, portanto não precisa instalar Maven. A primeira execução precisa de internet para baixar o Maven e as dependências.
 
-Execute os comandos dentro de `territory-predictive-insights-fev`, onde estão `pom.xml`, `mvnw` e `mvnw.cmd`.
+Execute os comandos na pasta que contém `pom.xml`, `mvnw` e `mvnw.cmd`. Em um clone do GitHub sem indicar outro nome de pasta, ela se chama `territory-predictive-insights-poo`.
 
 ### Testes
 
@@ -129,7 +129,7 @@ Na primeira abertura, sem medições no banco, `SementeHistorico` fornece 19 lei
 
 Com essa semente, a chuva tem média móvel de 24,96 mm/h, ATENCAO, e comparação de 50,10 mm/h, CRITICO. O nível tem média de 1,64 m, sem alerta, e comparação de 2,30 m, ATENCAO. A obstrução ainda não tem previsão. São necessárias mais duas leituras válidas para sua média móvel e três para sua comparação. Falhas e descartes podem exigir ciclos adicionais.
 
-Para conferir a persistência, consulte a opção 5, gere leituras na opção 1, rode previsões na opção 2 e saia com 0. Reabra pelo mesmo diretório e consulte novamente. As contagens da opção 5 continuam as mesmas depois de reabrir, e a semente não entra de novo. Repetir as previsões sem novas leituras informa que o alerta já foi registrado. As quantidades variam entre execuções porque as leituras são aleatórias.
+Para conferir a persistência, gere leituras na opção 1 e rode as previsões na opção 2. Na opção 5, anote a quantidade de medições por sensor e o total de alertas. Saia com 0, reabra pelo mesmo diretório e compare as contagens da opção 5 antes de gerar novas leituras ou previsões. Os valores devem ser os mesmos, e a semente não deve entrar de novo. Se um alerta foi gravado, repetir a previsão com o mesmo histórico e os mesmos limiares informa que ele já foi registrado.
 
 ### Exceções
 
