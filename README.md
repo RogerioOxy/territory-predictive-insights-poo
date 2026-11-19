@@ -145,7 +145,7 @@ O bônus escolhido é exportar o histórico consultado. Na opção 3, consulte u
 
 ### Saída real
 
-Trecho literal de uma execução real, na primeira execução com banco vazio:
+Esta é a saída que apareceu quando rodamos pela primeira vez, com o banco vazio:
 
 ```text
 PLU-01 (Pluviometro) - Media movel
@@ -192,7 +192,7 @@ A interface `Sensor` declara leitura, funcionamento, tipo, código e alteração
 
 A Factory `FabricaPrevisao` usa um `EnumMap` de `TipoPrevisao` para funções criadoras, lendo janela e mínimo da configuração. É o único lugar com `new PrevisaoMediaMovel` e `new PrevisaoComparacao`; os testes também obtêm estratégias pela fábrica.
 
-Ela fica na criação das estratégias porque ali o tipo concreto muda conforme as estratégias ativas e seus parâmetros. O serviço recebe `EstrategiaPrevisao` e chama `prever()`. Uma terceira estratégia exige a classe e uma entrada no mapa, além de registrar seu tipo no enum e ativá-la na configuração. Não colocamos Factory nos sensores, cujos tipos são montados juntos no mapa territorial, nem nas medições e alertas, que recebem dados prontos. Não haveria o mesmo ganho.
+Ela fica na criação das estratégias porque ali o tipo concreto muda conforme as estratégias ativas e seus parâmetros. O serviço recebe `EstrategiaPrevisao` e chama `prever()`. Uma terceira estratégia exige a classe e uma entrada no mapa, além de registrar seu tipo no enum e ativá-la na configuração. Nos sensores não usamos Factory porque os três são criados juntos no mapa territorial, e medições e alertas já recebem os dados prontos.
 
 O Singleton `ConfiguracaoSistema` tem construtor privado, instância estática e `getInstance()`. Um `@Bean` de `ConfiguracaoAplicacao` entrega essa mesma instância ao Spring. Ele reúne parâmetros de previsão e o `DadosTerritorio`, dono dos limiares. Isso evita o menu alterar uma cópia enquanto o serviço consulta outra e usa o limite errado. Não usamos Builder porque os objetos não exigem montagem em várias etapas opcionais.
 
@@ -215,7 +215,7 @@ São 38 testes unitários em oito classes: `MedicaoTest`, `LimiaresTest`, `Dados
 
 No serviço, Mockito simula os dois repositories. `previsaoAcimaDoLimiarCriticoGravaAlertaCritico` fornece seis leituras de 55 mm/h e verifica duas gravações com `verify(alertaRepository, times(2)).save(...)`, ambas CRITICO, com limite 50. Outros testes usam `never()` para valores abaixo do limiar, histórico insuficiente e alertas já registrados.
 
-Resultado de uma execução real dos testes, com linhas literais:
+Resultado quando rodamos os testes:
 
 ```text
 [INFO] Tests run: 38, Failures: 0, Errors: 0, Skipped: 0
@@ -228,11 +228,11 @@ Os testes verificam regras e chamadas aos repositories. A execução real do men
 
 ### Quando se calar
 
-Com menos de cinco leituras, uma média pode ficar perto de um chute: um único valor estranho pesa muito no resultado. Preferimos informar que ainda falta histórico a mostrar um número com aparência de certeza. A média móvel exige cinco leituras e a comparação exige seis. Mesmo atingindo esse mínimo, o cálculo pode exagerar uma tendência. Na semente do pluviômetro, a comparação projeta 50,10 mm/h, CRITICO, enquanto a média móvel indica 24,96 mm/h, ATENCAO. Exibir as duas ajuda a perceber essa diferença. Um sensor desligado não fornece novas leituras. Porém, a implementação ainda permite prever usando seu histórico salvo: bloquear previsões com dados antigos seria uma melhoria, e não uma proteção já existente.
+Com menos de cinco leituras, uma média pode ficar perto de um chute: um único valor estranho pesa muito no resultado. Por isso, nesses casos o sistema avisa que ainda falta histórico em vez de mostrar um número. A média móvel exige cinco leituras e a comparação exige seis. Mesmo atingindo esse mínimo, o cálculo pode exagerar uma tendência. Na semente do pluviômetro, a comparação projeta 50,10 mm/h, CRITICO, enquanto a média móvel indica 24,96 mm/h, ATENCAO. Exibir as duas ajuda a perceber essa diferença. Um sensor desligado não fornece novas leituras. Mesmo assim, o sistema ainda deixa prever com o histórico que já estava salvo. Bloquear previsão com dado antigo é uma melhoria que não fizemos.
 
 ### O que os dados não representam
 
-Um pluviômetro em um ponto não informa como choveu na rua de cima. A obstrução de uma boca de lobo não descreve toda a rede de drenagem. Além disso, usamos sensores simulados com `Random`: os números demonstram o software, não as condições de uma cidade real. Para nossa proposta, também importa pensar em quem fica fora dos dados. Se a entrada viesse apenas de reclamações, como as do 156, um bairro que reclama menos poderia aparecer menos, mesmo sofrendo tantos alagamentos quanto outro. Ausência de dado não significa ausência de problema. Usar sensores no ponto reduz a dependência da reclamação, mas não elimina essa limitação: alguém escolhe onde instalar cada sensor, e os locais sem equipamento continuam sem representação direta.
+Um pluviômetro em um ponto não informa como choveu na rua de cima. A obstrução de uma boca de lobo não descreve toda a rede de drenagem. Além disso, usamos sensores simulados com `Random`: os números demonstram o software, não as condições de uma cidade real. Para nossa proposta, também importa pensar em quem fica fora dos dados. Se a entrada viesse apenas de reclamações, como as do 156, um bairro que reclama menos poderia aparecer menos, mesmo sofrendo tantos alagamentos quanto outro. Ou seja, não ter dado de um lugar não quer dizer que lá não tem problema. Usar sensores no ponto reduz a dependência da reclamação, mas não elimina essa limitação: alguém escolhe onde instalar cada sensor, e os locais sem equipamento continuam sem representação direta.
 
 ### Por que apoiar a pessoa
 
